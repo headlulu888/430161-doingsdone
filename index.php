@@ -35,6 +35,20 @@ $tasks = [
      'is_done' => false]
      ];
 
+function get_tasks_count_by_project_name($tasks, $project_name) {
+    if ($project_name == 'Все') {
+        return count($tasks);
+    } else {
+        $count = 0;
+        foreach ($tasks as $task) {
+            if ($task['project_name'] == $project_name) {
+                $count++;
+            }
+        }
+    }
+    return $count;
+}
+
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
@@ -100,7 +114,7 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
                                 <a class="main-navigation__list-item-link" href="#">
                                 <?= $value ?>
                                 </a>
-                                <span class="main-navigation__list-item-count">0</span>
+                                <span class="main-navigation__list-item-count"><?= get_tasks_count_by_project_name($tasks, $value); ?></span>
                             </li>
                         <?php endforeach; ?>
                         <!-- Конец Перебора массива projects -->
