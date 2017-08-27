@@ -1,4 +1,40 @@
 <?php
+// Массив проектов
+$projects = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
+
+//Массив Задач проектов
+$tasks = [
+    ['name' => 'Собеседование в IT компании',
+     'date_deadline' => '01.06.2018',
+     'project_name' => 'Работа',
+     'is_done' => false],
+
+    ['name' => 'Выполнить тестовое задание',
+     'date_deadline' => '25.05.2018',
+     'project_name' => 'Работа',
+     'is_done' => false],
+
+     ['name' => 'Сделать задание первого раздела',
+     'date_deadline' => '21.04.2018',
+     'project_name' => 'Учеба',
+     'is_done' => true],
+
+     ['name' => 'Встреча с другом',
+     'date_deadline' => '22.04.2018',
+     'project_name' => 'Входящие',
+     'is_done' => false],
+
+     ['name' => 'Купить корм для кота',
+     'date_deadline' => 'Нет',
+     'project_name' => 'Домашние дела   ',
+     'is_done' => false],
+
+     ['name' => 'Заказать пиццу',
+     'date_deadline' => 'Нет',
+     'project_name' => 'Домашние дела   ',
+     'is_done' => false]
+     ];
+
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
