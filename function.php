@@ -1,9 +1,11 @@
 <?php
-    function includeTemplate($pathname, $array) {
-        if (file_exists($pathname)) {
-            include_once($pathname);
-            ob_start();
-            ob_end_flush();
+    function renderTemplate($path, $array) {
+        if(file_exists($path)) {
+            ob_start('ob_gzhandler');
+            extract($array, EXTR_SKIP);
+            require_once $path;
+            $html = ob_get_clean();
+            return $html;
         } else {
             return "";
         }

@@ -1,58 +1,3 @@
-<?php
-// Массив проектов
-$projects = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
-
-//Массив Задач проектов
-$tasks = [
-    ['name' => 'Собеседование в IT компании',
-        'date_deadline' => '01.06.2018',
-        'project_name' => 'Работа',
-        'is_done' => false],
-
-    ['name' => 'Выполнить тестовое задание',
-        'date_deadline' => '25.05.2018',
-        'project_name' => 'Работа',
-        'is_done' => false],
-
-    ['name' => 'Сделать задание первого раздела',
-        'date_deadline' => '21.04.2018',
-        'project_name' => 'Учеба',
-        'is_done' => true],
-
-    ['name' => 'Встреча с другом',
-        'date_deadline' => '22.04.2018',
-        'project_name' => 'Входящие',
-        'is_done' => false],
-
-    ['name' => 'Купить корм для кота',
-        'date_deadline' => 'Нет',
-        'project_name' => 'Домашние дела   ',
-        'is_done' => false],
-
-    ['name' => 'Заказать пиццу',
-        'date_deadline' => 'Нет',
-        'project_name' => 'Домашние дела   ',
-        'is_done' => false]
-];
-
-// показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
-
-// устанавливаем часовой пояс в Московское время
-date_default_timezone_set('Europe/Moscow');
-
-$days = rand(-3, 3);
-$task_deadline_ts = strtotime("+" . $days . " day midnight"); // метка времени даты выполнения задачи
-$current_ts = strtotime('now midnight'); // текущая метка времени
-
-// запишите сюда дату выполнения задачи в формате дд.мм.гггг
-$date_deadline = date("d.m.Y", $task_deadline_ts);
-
-// в эту переменную запишите кол-во дней до даты задачи
-$days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
-
-?>
-
 <h2 class="content__main-heading">Список задач</h2>
 
 <form class="search-form" action="index.php" method="post">
@@ -106,7 +51,6 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
                 </label>
             </td>
             <td class="task__date"><?= $task['date_deadline']; ?></td>
-
             <td class="task__controls">
                 <button class="expand-control" type="button" name="button">Выполнить первое задание</button>
                 <ul class="expand-list hidden">
