@@ -10,4 +10,20 @@
             return "";
         }
     }
+
+    function find_project_tasks($tasks, $category) {
+        if($category == 'Все') {
+            $result = $tasks;
+        } else {
+            $filtered_array = array_filter($tasks, function($var) use($category) {
+                return $var['category'] == $category;
+            });
+            $result = $filtered_array;
+        }
+        return $result;
+    }
+
+    function calc_number_of_tasks($tasks, $category) {
+        return count(find_project_tasks($tasks, $category));
+    }
 ?>

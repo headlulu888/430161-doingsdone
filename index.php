@@ -70,9 +70,27 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
 
 require_once "./function.php";
 
-$page_content = renderTemplate('templates/index.php', ['tasks' => $tasks, 'show_complete_tasks' =>$show_complete_tasks]);
+// $page_content = renderTemplate('templates/index.php', ['tasks' => $tasks, 'show_complete_tasks' =>$show_complete_tasks]);
 
-$layout_content = renderTemplate('templates/layout.php', ['content' => $page_content, 'name' => $name, 'title' => 'Дела в порядке - Главная!', 'projects' => $projects, 'tasks' => $tasks]);
+// $layout_content = renderTemplate('templates/layout.php', ['content' => $page_content, 'name' => $name, 'title' => 'Дела в порядке - Главная!', 'projects' => $projects, 'tasks' => $tasks]);
 
+$project_id = isset($_GET['project']) ? $_GET['project'] : 0;
+if(!array_key_exists($project_id, $project_list)) {
+    http_response_code(404);
+} else {
+    $filtered_tasks = find_project_tasks($tasks, $project_list[$project_id]);
+
+    $page_content = renderTemplate('./templates/index.php', [
+        'tasks_list' => $filtered_tasks,
+        'show_complete_tasks' => $show_complete_tasks
+        ]);
+    $layout_content = renderTemplate('./templates/layout.php', [
+        'page_main_content' => $page_content,
+        'page_title' => 'Дела в порядке',
+        'projects_list' => $projects,
+        'tasks_list' => $tasks,
+        'project_id' => $project_id
+        ]);
 print($layout_content);
+}
 ?>
