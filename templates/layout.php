@@ -42,7 +42,7 @@
                     <ul class="main-navigation__list">
                         <!-- Перебор массива projects -->
                         <?php foreach ($projects as $key => $value): ?>
-                            <li class="main-navigation__list-item <?= ($key == $project_id): ?> main-navigation__list-item--active <?php endif; ?>">
+                            <li class="main-navigation__list-item <?= ($key == $project_id) ? 'main-navigation__list-item--active' :''?>">
                                 <a class="main-navigation__list-item-link" href="?project=<?= $key ?>">
                                     <?= $value ?>
                                 </a>

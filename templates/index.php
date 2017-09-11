@@ -46,10 +46,11 @@
         <tr class="tasks__item task <?= ($task['is_done'] ? 'task--completed' : ''); ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input visually-hidden" type="checkbox" <?= ($task['is_done'] ? 'checked' : ''); ?>>
+                    <input class="checkbox__input visually-hidden" type="checkbox" <?= ($task['is_done']==true ? 'checked' : ''); ?>>
                     <span class="checkbox__text"><?= $task['name']; ?></span>
                 </label>
             </td>
+
             <td class="task__date"><?= $task['date_deadline']; ?></td>
             <td class="task__controls">
                 <button class="expand-control" type="button" name="button">Выполнить первое задание</button>

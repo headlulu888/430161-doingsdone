@@ -11,19 +11,23 @@
         }
     }
 
-    function find_project_tasks($tasks, $category) {
-        if($category == 'Все') {
+    function find_project_tasks($tasks, $projects) {
+        if($projects == 'Все') {
             $result = $tasks;
         } else {
-            $filtered_array = array_filter($tasks, function($var) use($category) {
-                return $var['category'] == $category;
-            });
+          $arrlist=[];
+            foreach($tasks as $key => $value) {
+              if ($value['project_name'] === $projects)
+              $arrlist[]=$value;
+            }
+
+            $filtered_array = $arrlist;
             $result = $filtered_array;
         }
         return $result;
     }
 
-    function calc_number_of_tasks($tasks, $category) {
-        return count(find_project_tasks($tasks, $category));
+    function calc_number_of_tasks($tasks, $projects) {
+        return count(find_project_tasks($tasks, $projects));
     }
 ?>
