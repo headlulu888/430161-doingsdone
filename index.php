@@ -29,12 +29,12 @@ $tasks = [
 
     ['name' => 'Купить корм для кота',
         'date_deadline' => 'Нет',
-        'project_name' => 'Домашние дела   ',
+        'project_name' => 'Домашние дела',
         'is_done' => false],
 
     ['name' => 'Заказать пиццу',
         'date_deadline' => 'Нет',
-        'project_name' => 'Домашние дела   ',
+        'project_name' => 'Домашние дела',
         'is_done' => false]
 ];
 
@@ -70,9 +70,25 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
 
 require_once "./function.php";
 
-$page_content = renderTemplate('templates/index.php', ['tasks' => $tasks, 'show_complete_tasks' =>$show_complete_tasks]);
+$project_id = isset($_GET['project']) ? $_GET['project'] : 0;
 
-$layout_content = renderTemplate('templates/layout.php', ['content' => $page_content, 'name' => $name, 'title' => 'Дела в порядке - Главная!', 'projects' => $projects, 'tasks' => $tasks]);
+if(!array_key_exists($project_id, $projects)) {
+    http_response_code(404);
+} else {
+    $filtered_tasks = find_project_tasks($tasks, $projects[$project_id]);
+    $content = renderTemplate('./templates/index.php', [
+        'tasks' => $filtered_tasks,
+        'show_complete_tasks' => $show_complete_tasks
+        ]);
 
-print($layout_content);
+    $layout_content = renderTemplate('./templates/layout.php', [
+        'content' => $content,
+        'title' => 'Дела в порядке',
+        'projects' => $projects,
+        'tasks' => $tasks,
+        'project_id' => $project_id,
+        'name' => $name
+        ]);
+    print($layout_content);
+}
 ?>
