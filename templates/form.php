@@ -7,10 +7,6 @@ $file    = $_POST['file'] ?? '';
 $projects = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
 ?>
 
-<html>
-<head>
-  <link rel="stylesheet" href="../css/style.css">
-</head>
 <div class="modal">
   <button class="modal__close" type="button" name="button">Закрыть</button>
 
@@ -57,4 +53,3 @@ $projects = ["Все", "Входящие", "Учеба", "Работа", "Дом
     </div>
   </form>
 </div>
-</html>

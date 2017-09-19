@@ -30,4 +30,31 @@
     function calc_number_of_tasks($tasks, $projects) {
         return count(find_project_tasks($tasks, $projects));
     }
+
+    // валидация даты
+    function validate_date($value) {
+      if($value) {
+        $tmp = exploda(".", $value);
+        if(!checkdate($tmp[1], $tmp[0], $tmp[2])) {
+          return "Введите дату в формате ДД.ММ.ГГГГ";
+        }
+      }
+    }
+
+    // валидация формы
+    function validate_form($required, $rules, $data) {
+      $errors = [];
+      foreach($data as $key => $value) {
+        if(in_array($key, $required) && $value == "") {
+          $errors[$key] = "Заполните это поле";
+        }
+        if(key_exists($key, $rules)) {
+          $error_text = call_user_func($rules[$key], $value);
+          if($error_text) {
+            $errors[$key] = $error_text;
+          }
+        }
+      }
+      return $errors;
+    }
 ?>

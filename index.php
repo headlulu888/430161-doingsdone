@@ -70,7 +70,22 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
 
 require_once "./function.php";
 
+$add = isset($_GET['add']);
+$errors = [];
+
 $project_id = isset($_GET['project']) ? $_GET['project'] : 0;
+
+// if($_SERVER["REQUEST_METHOD"] == "POST" && isset(&_POST)) {
+//   $required = ["name", "project", "date"];
+//   $rules = ["date" => "validate_date"];
+//   $new_task_data = [
+//     "name" => (isset($_POST['name']) ? (&_POST['name']) : ''),
+//     "project" => (isset($_POST['project']) ? (&_POST['project']) : ''),
+//     "date" => (isset($_POST['date']) ? (&_POST['date']) : ''),
+//     "preview" => (isset($_POST['preview']) ? (&_POST['preview']) : ''),
+//     "completed" => false
+//   ];
+// }
 
 if(!array_key_exists($project_id, $projects)) {
     http_response_code(404);
@@ -90,5 +105,15 @@ if(!array_key_exists($project_id, $projects)) {
         'name' => $name
         ]);
     print($layout_content);
+
+    // to_do
+    if($add || count($errors)) {
+      $modal_content = renderTemplate('./templates/form.php',
+      ['data' => $new_task_data,
+       'projects_list' => $projects_list,
+       'errors' => $errors
+     ]);
+     print($modal_content);
+    }
 }
 ?>
