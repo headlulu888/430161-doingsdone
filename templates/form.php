@@ -12,7 +12,7 @@ $projects = ["Все", "Входящие", "Учеба", "Работа", "Дом
 
   <h2 class="modal__heading">Добавление задачи</h2>
 
-  <form class="form" enctype="multipart/form-data" action="index.html" method="post">
+  <form class="form" enctype="multipart/form-data" action="./index.html" method="post">
     <div class="form__row">
       <label class="form__label" for="name">Название <sup>*</sup></label>
 
