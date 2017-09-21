@@ -72,20 +72,44 @@ require_once "./function.php";
 
 $add = isset($_GET['add']);
 $errors = [];
+$show = false;
 
 $project_id = isset($_GET['project']) ? $_GET['project'] : 0;
 
- if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
-   $required = ["name", "project", "date"];
-   $rules = ["date" => "validate_date"];
-   $new_task_data = [
-     "title" => (isset($_POST['title']) ? ($_POST['title']) : ''),
-     "project" => (isset($_POST['project']) ? ($_POST['project']) : ''),
-     "date" => (isset($_POST['date']) ? ($_POST['date']) : ''),
-     "preview" => (isset($_POST['preview']) ? ($_POST['preview']) : ''),
-     "completed" => false
-   ];
- }
+// if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
+//   $required = ["name", "project", "date"];
+//   $rules = ["date" => "validate_date"];
+//   $new_task_data = [
+//     "title" => (isset($_POST['title']) ? ($_POST['title']) : ''),
+//     "project" => (isset($_POST['project']) ? ($_POST['project']) : ''),
+//     "date" => (isset($_POST['date']) ? ($_POST['date']) : ''),
+//     "preview" => (isset($_POST['preview']) ? ($_POST['preview']) : ''),
+//     "completed" => false
+//   ];
+// }
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $project = $_POST['title'];
+    $folder = $_POST['project'];
+    $data = $_POST['data'];
+
+    if($_POST['title'] == '' || $_POST['project'] == '' || $_POST['data'] == '') {
+        require_once "./templates/form.php";
+        $show = true;
+    } else {
+        if(isset($_FILES['preview'])) {
+            $file_name = $_FILES['preview']['title'];
+            $file_path = __DIR__ . '/';
+            move_uploaded_file($_FILES['preview']['tmp_name'], $file_path . $file_name);
+        }
+
+        $task_new = ['task' => $project,
+                     'date' => $data,
+                     'category' => $folder,
+                     'done' => 'Нет'];
+        array_unshift($projects, $task_new);
+    }
+}
 
 if(!array_key_exists($project_id, $projects)) {
     http_response_code(404);
@@ -110,7 +134,7 @@ if(!array_key_exists($project_id, $projects)) {
     if($add || count($errors)) {
       $modal_content = renderTemplate('./templates/form.php',
       ['data' => $new_task_data,
-       'projects_list' => $projects_list,
+       'projects' => $projects,
        'errors' => $errors
      ]);
      print($modal_content);
