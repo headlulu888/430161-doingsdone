@@ -8,7 +8,7 @@
 </head>
 
 <!--class="overlay"-->
-<body <?php if($overlay): ?>class="overlay" <?php endif; ?>>
+<body <?php if(isset($_GET['add'])) print 'class="overlay"';?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">

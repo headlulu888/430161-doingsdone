@@ -75,17 +75,17 @@ $errors = [];
 
 $project_id = isset($_GET['project']) ? $_GET['project'] : 0;
 
-// if($_SERVER["REQUEST_METHOD"] == "POST" && isset(&_POST)) {
-//   $required = ["name", "project", "date"];
-//   $rules = ["date" => "validate_date"];
-//   $new_task_data = [
-//     "name" => (isset($_POST['name']) ? (&_POST['name']) : ''),
-//     "project" => (isset($_POST['project']) ? (&_POST['project']) : ''),
-//     "date" => (isset($_POST['date']) ? (&_POST['date']) : ''),
-//     "preview" => (isset($_POST['preview']) ? (&_POST['preview']) : ''),
-//     "completed" => false
-//   ];
-// }
+ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
+   $required = ["name", "project", "date"];
+   $rules = ["date" => "validate_date"];
+   $new_task_data = [
+     "title" => (isset($_POST['title']) ? ($_POST['title']) : ''),
+     "project" => (isset($_POST['project']) ? ($_POST['project']) : ''),
+     "date" => (isset($_POST['date']) ? ($_POST['date']) : ''),
+     "preview" => (isset($_POST['preview']) ? ($_POST['preview']) : ''),
+     "completed" => false
+   ];
+ }
 
 if(!array_key_exists($project_id, $projects)) {
     http_response_code(404);
