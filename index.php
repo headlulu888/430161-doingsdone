@@ -70,74 +70,75 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
 
 require_once "./function.php";
 
-$add = isset($_GET['add']);
-$errors = [];
-$show = false;
+$content_data = [
+  'tasks' => [],
+  'show_complete_tasks' => $show_complete_tasks,
+];
 
-$project_id = isset($_GET['project']) ? $_GET['project'] : 0;
+$modal_data = [
+  'required' => ['name', 'project', 'date'],
+  'rules'    => ['project' => 'validate_project',
+              'date'    => 'validate_date'],
+  'errors' => [],
+  'projects' => $projects
+];
 
-// if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
-//   $required = ["name", "project", "date"];
-//   $rules = ["date" => "validate_date"];
-//   $new_task_data = [
-//     "title" => (isset($_POST['title']) ? ($_POST['title']) : ''),
-//     "project" => (isset($_POST['project']) ? ($_POST['project']) : ''),
-//     "date" => (isset($_POST['date']) ? ($_POST['date']) : ''),
-//     "preview" => (isset($_POST['preview']) ? ($_POST['preview']) : ''),
-//     "completed" => false
-//   ];
-// }
+$layout_data = [
+  'title'    => 'Дела в порядке!',
+  'projects' => $projects,
+  'active_prorject' => 0,
+  'tasks'    => [],
+  'content'  => '',
+  'modal'    => '',
+];
 
-if($_SERVER["REQUEST_METHOD"] == "POST") {
-    $project = $_POST['title'];
-    $folder = $_POST['project'];
-    $data = $_POST['data'];
-
-    if($_POST['title'] == '' || $_POST['project'] == '' || $_POST['data'] == '') {
-        require_once "./templates/form.php";
-        $show = true;
-    } else {
-        if(isset($_FILES['preview'])) {
-            $file_name = $_FILES['preview']['title'];
-            $file_path = __DIR__ . '/';
-            move_uploaded_file($_FILES['preview']['tmp_name'], $file_path . $file_name);
-        }
-
-        $task_new = ['task' => $project,
-                     'date' => $data,
-                     'category' => $folder,
-                     'done' => 'Нет'];
-        array_unshift($projects, $task_new);
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+  foreach ($_POST as $key => $value) {
+    if(in_array($key, $modal_data['required']) && $value == '') {
+      $modal_data['errors'][] = $key;
     }
+
+    if(array_key_exists($key, $modal_data['rules']) && !call_user_func($modal_data['rules'][$key], $value)) {
+      $modal_data['errors'][] = $key;
+    }
+  }
+
+  if(!count($modal_data['errors'])) {
+    $new_task = [
+      'title' => $_POST['name'],
+      'date' => $_POST['date'],
+      'category' => $projects[$_POST['project']],
+      'is_done' => false
+    ];
+    array_unshift($tasks, $new_task);
+
+    if(isset($_FILES['preview'])) {
+      $file_path = __DIR__ . '\\';
+      $file_name = $_FILES['preview']['name'];
+      $file_tmp_name = $_FILES['preview']['tmp_name'];
+      move_uploaded_file($file_tmp_name, $file_path . $file_name);
+    }
+  }
 }
 
-if(!array_key_exists($project_id, $projects)) {
-    http_response_code(404);
+$project = $_GET['project'] ?? 0;
+
+if(array_key_exists($project, $projects)) {
+  $content_data['tasks'] = find_project_tasks($tasks, $projects[$project]);
 } else {
-    $filtered_tasks = find_project_tasks($tasks, $projects[$project_id]);
-    $content = renderTemplate('./templates/index.php', [
-        'tasks' => $filtered_tasks,
-        'show_complete_tasks' => $show_complete_tasks
-        ]);
-
-    $layout_content = renderTemplate('./templates/layout.php', [
-        'content' => $content,
-        'title' => 'Дела в порядке',
-        'projects' => $projects,
-        'tasks' => $tasks,
-        'project_id' => $project_id,
-        'name' => $name
-        ]);
-    print($layout_content);
-
-    // to_do
-    if($add || count($errors)) {
-      $modal_content = renderTemplate('./templates/form.php',
-      ['data' => $new_task_data,
-       'projects' => $projects,
-       'errors' => $errors
-     ]);
-     print($modal_content);
-    }
+  http_response_code(404);
 }
+
+$layout_data['active_prorject'] = $project;
+$layout_data['tasks'] = $tasks;
+$layout_data['content'] = renderTemplate('templates/index.php', $content_data);
+
+if(isset($_GET['add']) || count($modal_data['errors'])) {
+  $layout_data['modal'] = renderTemplate('templates/modal.php', $modal_data);
+}
+
+$layout = renderTemplate('templates/layout.php', $layout_data);
+
+print($layout);
+
 ?>

@@ -1,10 +1,10 @@
 <h2 class="content__main-heading">Список задач</h2>
 
-<form class="search-form" action="index.php" method="post">
-    <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
+<modal class="search-modal" action="index.php" method="post">
+    <input class="search-modal__input" type="text" name="" value="" placeholder="Поиск по задачам">
 
-    <input class="search-form__submit" type="submit" name="" value="Искать">
-</form>
+    <input class="search-modal__submit" type="submit" name="" value="Искать">
+</modal>
 
 <div class="tasks-controls">
     <div class="radio-button-group">
