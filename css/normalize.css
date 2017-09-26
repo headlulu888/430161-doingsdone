@@ -241,7 +241,7 @@ svg:not(:root) {
   overflow: hidden;
 }
 
-/* Forms
+/* modals
    ========================================================================== */
 
 /**
@@ -271,13 +271,13 @@ input { /* 1 */
 }
 
 /**
- * Remove the inheritance of text transform in Edge, Firefox, and IE.
- * 1. Remove the inheritance of text transform in Firefox.
+ * Remove the inheritance of text transmodal in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transmodal in Firefox.
  */
 
 button,
 select { /* 1 */
-  text-transform: none;
+  text-transmodal: none;
 }
 
 /**

@@ -71,6 +71,7 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
 
 require_once "./function.php";
 
+<<<<<<< HEAD
 $project_id = isset($_GET['project']) ? $_GET['project'] : 0;
 
 if(!array_key_exists($project_id, $projects)) {
@@ -132,5 +133,77 @@ if(!array_key_exists($project_id, $projects)) {
 
     $form_content = renderTemplate('./templates/form.php', []);
     print($layout_content);
+=======
+$content_data = [
+  'tasks' => [],
+  'show_complete_tasks' => $show_complete_tasks,
+];
+
+$modal_data = [
+  'required' => ['name', 'project', 'date'],
+  'rules'    => ['project' => 'validate_project',
+              'date'    => 'validate_date'],
+  'errors' => [],
+  'projects' => $projects
+];
+
+$layout_data = [
+  'title'    => 'Дела в порядке!',
+  'projects' => $projects,
+  'active_prorject' => 0,
+  'tasks'    => [],
+  'content'  => '',
+  'modal'    => '',
+];
+
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+  foreach ($_POST as $key => $value) {
+    if(in_array($key, $modal_data['required']) && $value == '') {
+      $modal_data['errors'][] = $key;
+    }
+
+    if(array_key_exists($key, $modal_data['rules']) && !call_user_func($modal_data['rules'][$key], $value)) {
+      $modal_data['errors'][] = $key;
+    }
+  }
+
+  if(!count($modal_data['errors'])) {
+    $new_task = [
+      'title' => $_POST['name'],
+      'date' => $_POST['date'],
+      'category' => $projects[$_POST['project']],
+      'is_done' => false
+    ];
+    array_unshift($tasks, $new_task);
+
+    if(isset($_FILES['preview'])) {
+      $file_path = __DIR__ . '\\';
+      $file_name = $_FILES['preview']['name'];
+      $file_tmp_name = $_FILES['preview']['tmp_name'];
+      move_uploaded_file($file_tmp_name, $file_path . $file_name);
+    }
+  }
 }
+
+$project = $_GET['project'] ?? 0;
+
+if(array_key_exists($project, $projects)) {
+  $content_data['tasks'] = find_project_tasks($tasks, $projects[$project]);
+} else {
+  http_response_code(404);
+>>>>>>> 1f9e675ba056b6018f39e71beda6d23b13cc26e4
+}
+
+$layout_data['active_prorject'] = $project;
+$layout_data['tasks'] = $tasks;
+$layout_data['content'] = renderTemplate('templates/index.php', $content_data);
+
+if(isset($_GET['add']) || count($modal_data['errors'])) {
+  $layout_data['modal'] = renderTemplate('templates/modal.php', $modal_data);
+}
+
+$layout = renderTemplate('templates/layout.php', $layout_data);
+
+print($layout);
+
 ?>

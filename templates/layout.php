@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
+<<<<<<< HEAD
 <body <?php echo "class=$body"; ?>><!--class="overlay"-->
+=======
+<!--class="overlay"-->
+<body <?= $layout_data['modal'] ? 'class="overlay"' : ''; ?>>
+>>>>>>> 1f9e675ba056b6018f39e71beda6d23b13cc26e4
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
@@ -18,7 +23,11 @@
             </a>
 
             <div class="main-header__side">
+<<<<<<< HEAD
                 <a class="main-header__side-item button button--plus" href="./index.php?add=1">Добавить задачу</a>
+=======
+                <a class="main-header__side-item button button--plus" href="./index.php?add">Добавить задачу</a>
+>>>>>>> 1f9e675ba056b6018f39e71beda6d23b13cc26e4
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
@@ -71,7 +80,11 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
+<<<<<<< HEAD
         <a class="main-footer__button button button--plus">Добавить задачу</a>
+=======
+        <a class="main-footer__button button button--plus" href="./index.php?add">Добавить задачу</a>
+>>>>>>> 1f9e675ba056b6018f39e71beda6d23b13cc26e4
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
@@ -102,7 +115,11 @@
     </div>
 </footer>
 
+<<<<<<< HEAD
 <?php echo $modal; ?>
+=======
+<?= $layout_modal; ?>
+>>>>>>> 1f9e675ba056b6018f39e71beda6d23b13cc26e4
 
 <script type="text/javascript" src="js/script.js"></script>
 </body>
