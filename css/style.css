@@ -2,14 +2,14 @@
   font-weight: 400;
   font-family: "OpenSans";
   font-style: normal;
-  src: url("../fonts/opensans-regular-webfont.woff2") modalat("woff2"), url("../fonts/opensans-regular-webfont.woff") modalat("woff");
+  src: url("../fonts/opensans-regular-webfont.woff2") format("woff2"), url("../fonts/opensans-regular-webfont.woff") format("woff");
 }
 
 @font-face {
   font-weight: 700;
   font-family: "OpenSans";
   font-style: normal;
-  src: url("../fonts/opensans-bold-webfont.woff2") modalat("woff2"), url("../fonts/opensans-bold-webfont.woff") modalat("woff");
+  src: url("../fonts/opensans-bold-webfont.woff2") format("woff2"), url("../fonts/opensans-bold-webfont.woff") format("woff");
 }
 
 .visually-hidden {
@@ -108,7 +108,7 @@ a:focus {
   font-size: 12px;
   text-align: center;
   color: #ffffff;
-  text-transmodal: uppercase;
+  text-transform: uppercase;
   text-decoration: none;
 
   background-color: #6e45e2;
@@ -182,7 +182,7 @@ a:focus {
   padding: 25px 30px;
 
   background-color: #ffffff;
-  transmodal: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .modal__close {
@@ -291,7 +291,7 @@ a:focus {
 
   font-size: 14px;
   color: #9fa4af;
-  text-transmodal: uppercase;
+  text-transform: uppercase;
 }
 
 .main-navigation__list-item--active {
@@ -340,13 +340,13 @@ a:focus {
   margin-bottom: 25px;
 }
 
-.search-modal {
+.search-form {
   position: relative;
 
   margin-bottom: 23px;
 }
 
-.search-modal__input {
+.search-form__input {
   box-sizing: border-box;
   width: 100%;
   padding: 15px;
@@ -355,7 +355,7 @@ a:focus {
   border-radius: 3px;
 }
 
-.search-modal__submit {
+.search-form__submit {
   position: absolute;
   top: 11px;
   right: 8px;
@@ -484,7 +484,7 @@ a:focus {
 
   border-bottom: 1px solid #7f5be5;
   border-left: 1px solid #7f5be5;
-  transmodal: rotate(-50deg);
+  transform: rotate(-50deg);
 }
 
 .checkbox__text:hover::before,
@@ -702,22 +702,22 @@ a:focus {
   stroke: #502bbb;
 }
 
-.modal {
+.form {
   max-width: 445px;
 }
 
-.modal__row {
+.form__row {
   margin-bottom: 25px;
 }
 
-.modal__label {
+.form__label {
   display: inline-block;
   margin-bottom: 7px;
 
   font-size: 13px;
 }
 
-.modal__input {
+.form__input {
   box-sizing: border-box;
   width: 100%;
   padding: 15px 20px;
@@ -730,25 +730,25 @@ a:focus {
   appearance: none;
 }
 
-.modal__input--error {
+.form__input--error {
   background: transparent url("../img/icon-error.png") no-repeat right 10px top 50%;
   border-color: #f84646;
 }
 
-.modal__input--select {
+.form__input--select {
   background: #ffffff url("../img/dropdown.svg") right 20px top 50% no-repeat;
 }
 
-.modal__input--date {
+.form__input--date {
   background: #ffffff url("../img/icon-calendar.png") right 17px top 50% no-repeat;
 }
 
-.modal__row--controls {
+.form__row--controls {
   margin-top: 60px;
   margin-bottom: 0;
 }
 
-.modal__message {
+.form__message {
   margin: 0;
   margin-top: 2px;
 
