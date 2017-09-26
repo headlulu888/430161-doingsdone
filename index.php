@@ -1,5 +1,6 @@
 <?php
 // Имя
+error_reporting('E_ALL');
 $name = "Андрей";
 
 // Массив проектов
@@ -8,34 +9,34 @@ $projects = ["Все", "Входящие", "Учеба", "Работа", "Дом
 //Массив Задач проектов
 $tasks = [
     ['name' => 'Собеседование в IT компании',
-     'date_deadline' => '01.06.2018',
-     'project_name' => 'Работа',
-     'is_done' => false],
+        'date_deadline' => '01.06.2018',
+        'project_name' => 'Работа',
+        'is_done' => false],
 
     ['name' => 'Выполнить тестовое задание',
-     'date_deadline' => '25.05.2018',
-     'project_name' => 'Работа',
-     'is_done' => false],
+        'date_deadline' => '25.05.2018',
+        'project_name' => 'Работа',
+        'is_done' => false],
 
     ['name' => 'Сделать задание первого раздела',
-     'date_deadline' => '21.04.2018',
-     'project_name' => 'Учеба',
-     'is_done' => true],
+        'date_deadline' => '21.04.2018',
+        'project_name' => 'Учеба',
+        'is_done' => true],
 
     ['name' => 'Встреча с другом',
-     'date_deadline' => '22.04.2018',
-     'project_name' => 'Входящие',
-     'is_done' => false],
+        'date_deadline' => '22.04.2018',
+        'project_name' => 'Входящие',
+        'is_done' => false],
 
     ['name' => 'Купить корм для кота',
-     'date_deadline' => 'Нет',
-     'project_name' => 'Домашние дела',
-     'is_done' => false],
+        'date_deadline' => 'Нет',
+        'project_name' => 'Домашние дела',
+        'is_done' => false],
 
     ['name' => 'Заказать пиццу',
-     'date_deadline' => 'Нет',
-     'project_name' => 'Домашние дела',
-     'is_done' => false]
+        'date_deadline' => 'Нет',
+        'project_name' => 'Домашние дела',
+        'is_done' => false]
 ];
 
 function get_tasks_count_by_project_name($tasks, $project_name) {
@@ -70,46 +71,7 @@ $days_until_deadline = ($task_deadline_ts - $current_ts) / 86400;
 
 require_once "./function.php";
 
-$add = isset($_GET['add']);
-$errors = [];
-$show = false;
-
 $project_id = isset($_GET['project']) ? $_GET['project'] : 0;
-
-// if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
-//   $required = ["name", "project", "date"];
-//   $rules = ["date" => "validate_date"];
-//   $new_task_data = [
-//     "title" => (isset($_POST['title']) ? ($_POST['title']) : ''),
-//     "project" => (isset($_POST['project']) ? ($_POST['project']) : ''),
-//     "date" => (isset($_POST['date']) ? ($_POST['date']) : ''),
-//     "preview" => (isset($_POST['preview']) ? ($_POST['preview']) : ''),
-//     "completed" => false
-//   ];
-// }
-
-if($_SERVER["REQUEST_METHOD"] == "POST") {
-    $project = $_POST['title'];
-    $folder = $_POST['project'];
-    $data = $_POST['data'];
-
-    if($_POST['title'] == '' || $_POST['project'] == '' || $_POST['data'] == '') {
-        require_once "./templates/form.php";
-        $show = true;
-    } else {
-        if(isset($_FILES['preview'])) {
-            $file_name = $_FILES['preview']['title'];
-            $file_path = __DIR__ . '/';
-            move_uploaded_file($_FILES['preview']['tmp_name'], $file_path . $file_name);
-        }
-
-        $task_new = ['task' => $project,
-                     'date' => $data,
-                     'category' => $folder,
-                     'done' => 'Нет'];
-        array_unshift($projects, $task_new);
-    }
-}
 
 if(!array_key_exists($project_id, $projects)) {
     http_response_code(404);
@@ -118,26 +80,57 @@ if(!array_key_exists($project_id, $projects)) {
     $content = renderTemplate('./templates/index.php', [
         'tasks' => $filtered_tasks,
         'show_complete_tasks' => $show_complete_tasks
-        ]);
+    ]);
 
-    $layout_content = renderTemplate('./templates/layout.php', [
-        'content' => $content,
-        'title' => 'Дела в порядке',
-        'projects' => $projects,
-        'tasks' => $tasks,
-        'project_id' => $project_id,
-        'name' => $name
-        ]);
-    print($layout_content);
+    $modal_data = [
+        'required' => ['name', 'project', 'date'],
+        'rules'    => ['project' => 'validate_project',
+            'date'    => 'validate_date'],
+        'errors' => [],
+        'projects' => $projects
+    ];
 
-    // to_do
-    if($add || count($errors)) {
-      $modal_content = renderTemplate('./templates/form.php',
-      ['data' => $new_task_data,
-       'projects' => $projects,
-       'errors' => $errors
-     ]);
-     print($modal_content);
+    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+        foreach ($_POST as $key => $value) {
+            if(in_array($key, $modal_data['required']) && $value == '') {
+                $modal_data['errors'][] = $key;
+            }
+
+            if(array_key_exists($key, $modal_data['rules']) && !call_user_func($modal_data['rules'][$key], $value)) {
+                $modal_data['errors'][] = $key;
+            }
+        }
     }
+
+    if($_GET['add'] == 1) {
+        $body = "overlay";
+        $form_content = renderTemplate('./templates/form.php',  ['data' => $modal_data] );
+        $layout_content = renderTemplate('./templates/layout.php', [
+            'content' => $content,
+            'title' => 'Дела в порядке',
+            'projects' => $projects,
+            'tasks' => $tasks,
+            'project_id' => $project_id,
+            'name' => $name,
+            'body' => $body,
+            'modal' => $form_content
+        ]);
+
+        //  $layout_data['modal'] = renderTemplate('./templates/form.php', $modal_data);
+    } else {
+
+
+        $layout_content = renderTemplate('./templates/layout.php', [
+            'content' => $content,
+            'title' => 'Дела в порядке',
+            'projects' => $projects,
+            'tasks' => $tasks,
+            'project_id' => $project_id,
+            'name' => $name
+        ]);
+    }
+
+    $form_content = renderTemplate('./templates/form.php', []);
+    print($layout_content);
 }
 ?>
